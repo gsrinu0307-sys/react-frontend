@@ -88,38 +88,39 @@ function AllOutputs() {
 
   // ---------- SUBMIT ALL DATA ----------
   const handleSubmitAll = async () => {
-    setSubmitAttempted(true);
+  setSubmitAttempted(true);
 
-    if (hasEmptyFields(allData)) {
-      alert("Please fill all required fields before submitting.");
+  if (hasEmptyFields(allData)) {
+    alert("Please fill all required fields before submitting.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      "https://backend-fqru.onrender.com/api/application",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(allData), // ✅ FIXED
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      alert(result.message || "Submission failed");
       return;
     }
 
-    try {
-      const response = await fetch('https://backend-fqru.onrender.com', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        alert(result.message || "Submission failed");
-        return;
-      }
-
-      // ✅ Redirect to success page with Application ID
-      navigate("/success", {
-        state: { applicationId: result.id },
-      });
-
-    } catch (error) {
-      console.error(error);
-      alert("Server error. Please try again later.");
-    }
-  };
-
+    navigate("/success", {
+      state: { applicationId: result.applicationId }, // ✅ FIXED
+    });
+  } catch (error) {
+    console.error(error);
+    alert("Server error. Please try again later.");
+  }
+};
+  
   return (
     <div className="app-container">
 
