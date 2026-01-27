@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import AllOutputs from "./components/sections/ALLoutputs";
 import Header from "./components/sections/Header";
 import Footer from "./components/sections/Footer";
-import NotFound from "./components/sections/NotFound";
+import NotFound from "./components/sections/Notfound";
 import SuccessPage from "./components/sections/SuccessPage";
 import ApplicationSearch from "./components/sections/ApplicationSearch";
 
