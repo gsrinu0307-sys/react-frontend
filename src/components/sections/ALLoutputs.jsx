@@ -96,7 +96,7 @@ function AllOutputs() {
     }
 
     try {
-      const response = await fetch('https://my-backend.onrender.com/api/application', {
+      const response = await fetch('https://backend-fqru.onrender.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
