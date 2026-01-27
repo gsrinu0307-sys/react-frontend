@@ -96,10 +96,10 @@ function AllOutputs() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/application", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(allData),
+      const response = await fetch('https://my-backend.onrender.com/api/application', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
 
       const result = await response.json();
