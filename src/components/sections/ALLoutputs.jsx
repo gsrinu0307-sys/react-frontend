@@ -19,17 +19,8 @@ function AllOutputs() {
   const [allData, setAllData] = useState({
     personal: {},
     contact: {},
-    family: {
-      father: {},
-      mother: {},
-      guardian: {},
-    },
-    education: {
-      ssc: {},
-      inter: {},
-      graduation: {},
-      postGraduation: {},
-    },
+    family: { father: {}, mother: {}, guardian: {} },
+    education: { ssc: {}, inter: {}, graduation: {}, postGraduation: {} },
     technicalSkills: {
       programming: { technologies: "", level: "", remarks: "" },
       frameworks: { technologies: "", level: "", remarks: "" },
@@ -38,31 +29,26 @@ function AllOutputs() {
       os: { technologies: "", level: "", remarks: "" },
       other: { technologies: "", level: "", remarks: "" },
     },
-    projects: Array(5).fill({
+    projects: Array.from({ length: 5 }, () => ({
       title: "",
       type: "",
       technologies: "",
       description: "",
       role: "",
-    }),
-    internships: Array(2).fill({
+    })),
+    internships: Array.from({ length: 2 }, () => ({
       organization: "",
       duration: "",
       domain: "",
       certificate: "",
-    }),
+    })),
     languages: {
       English: { read: "", write: "", speak: "" },
       Hindi: { read: "", write: "", speak: "" },
       Regional: { read: "", write: "", speak: "" },
       Others: { read: "", write: "", speak: "" },
     },
-    declaration: {
-      name: "",
-      date: "",
-      place: "",
-      sign: "",
-    },
+    declaration: { name: "", date: "", place: "", sign: "" },
   });
 
   const [submitAttempted, setSubmitAttempted] = useState(false);
@@ -77,101 +63,89 @@ function AllOutputs() {
 
   // ---------- CHECK EMPTY FIELDS ----------
   const hasEmptyFields = (obj) => {
-    if (Array.isArray(obj)) {
-      return obj.some(hasEmptyFields);
-    }
-    if (typeof obj === "object" && obj !== null) {
+    if (Array.isArray(obj)) return obj.some(hasEmptyFields);
+    if (typeof obj === "object" && obj !== null)
       return Object.values(obj).some(hasEmptyFields);
-    }
     return obj === "" || obj === null || obj === undefined;
   };
 
   // ---------- SUBMIT ALL DATA ----------
   const handleSubmitAll = async () => {
-  setSubmitAttempted(true);
+    setSubmitAttempted(true);
 
-  if (hasEmptyFields(allData)) {
-    alert("Please fill all required fields before submitting.");
-    return;
-  }
-
-  try {
-    const response = await fetch(
-      "https://backend-fqru.onrender.com/api/application",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(allData), // ✅ FIXED
-      }
-    );
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      alert(result.message || "Submission failed");
+    if (hasEmptyFields(allData)) {
+      alert("Please fill all required fields before submitting.");
       return;
     }
 
-    navigate("/success", {
-      state: { applicationId: result.applicationId }, // ✅ FIXED
-    });
-  } catch (error) {
-    console.error(error);
-    alert("Server error. Please try again later.");
-  }
-};
-  
+    try {
+      const response = await fetch(
+        "https://backend-fqru.onrender.com/api/application",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(allData),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        alert(result.message || "Submission failed");
+        return;
+      }
+
+      navigate("/success", {
+        state: { applicationId: result.applicationId },
+      });
+    } catch (error) {
+      console.error(error);
+      alert("Server error. Please try again later.");
+    }
+  };
+
   return (
     <div className="app-container">
-
       <PersonalInfoValidation
         data={allData.personal}
         setData={sectionSetter("personal")}
         submitAttempted={submitAttempted}
       />
-
       <ContactDetails
         data={allData.contact}
         setData={sectionSetter("contact")}
         submitAttempted={submitAttempted}
       />
-
       <FamilyDetails
         data={allData.family}
         setData={sectionSetter("family")}
         submitAttempted={submitAttempted}
       />
-
       <EducationForm
         data={allData.education}
         setData={sectionSetter("education")}
         submitAttempted={submitAttempted}
       />
-
       <TechnicalSkills
         data={allData.technicalSkills}
         setData={sectionSetter("technicalSkills")}
         submitAttempted={submitAttempted}
       />
-
       <ProjectDetails
         data={allData.projects}
         setData={sectionSetter("projects")}
         submitAttempted={submitAttempted}
       />
-
       <InternshipDetails
         data={allData.internships}
         setData={sectionSetter("internships")}
         submitAttempted={submitAttempted}
       />
-
       <LanguageProficiency
         data={allData.languages}
         setData={sectionSetter("languages")}
         submitAttempted={submitAttempted}
       />
-
       <Declaration
         data={allData.declaration}
         setData={sectionSetter("declaration")}
@@ -183,7 +157,6 @@ function AllOutputs() {
           SUBMIT APPLICATION
         </button>
       </div>
-
     </div>
   );
 }
